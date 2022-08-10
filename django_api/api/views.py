@@ -67,7 +67,16 @@ class CharacterView(View):
         return JsonResponse(data)
 
     def put(self, request, id):
-        """Http methods: Put"""
+        """Http methods: Put
+        
+        This method update a single character.
+        
+        requirements:
+        - name
+        - appears_in
+
+        Returns a JSON with a success or not found.
+        """
         jd = json.loads(request.body)
         characters = list(Character.objects.filter(id=id).values())
         if len(characters) > 0:
@@ -84,5 +93,19 @@ class CharacterView(View):
             }
         return JsonResponse(data)
 
-    def remove(self, request):
-        """"""
+    def delete(self, request, id):
+        """Remove.
+        
+        Removes a character by id.
+        """
+        characters = list(Character.objects.filter(id=id).values())
+        if len(characters) > 0:
+            Character.objects.filter(id=id).delete()
+            data = {
+                'message': 'Success'
+            }
+        else:
+            data = {
+                'message': 'Character not found.'
+            }
+        return JsonResponse(data)
